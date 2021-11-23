@@ -1,0 +1,78 @@
+From 7521c413175a7c5185e2f8cbc65a7d12cfbccf51 Mon Sep 17 00:00:00 2001
+From: Saszqa <ft.tamkun@gmail.com>
+Date: Tue, 23 Nov 2021 20:41:20 +0100
+Subject: [PATCH] fixes done
+
+---
+ errory.cpp | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/errory.cpp b/errory.cpp
+index fbc979b..206ae9c 100644
+--- a/errory.cpp
++++ b/errory.cpp
+@@ -5,6 +5,10 @@
+ #include <windows.h>
+ using namespace std;
+ 
++// operands are not evaluated left-to-right, but are unsequenced with respect to one another.
++
++// In order to fix this, we shold call cout<< twice, to ensure that values will be printed out in well defined order. 
++
+ int error1() {
+ int i ;
+ cout<<"Enter your number"<<endl;
+@@ -13,6 +17,18 @@ cout << i++ << i << endl;
+ return i;
+ }
+ 
++
++int error1fix(){
++    int i ;
++cout<<"Enter your number"<<endl;
++cin >> i;
++cout << i++ <<endl;
++cout<< i << endl;
++return i;
++}
++
++// value k is not initialized, this could result in undefined behaviour 
++// make sure the value is initialized as k=0
+ int error2() {
+   int k;
+   int w;
+@@ -25,6 +41,14 @@ int error2() {
+   return w;
+ }
+ 
++int error2fix(){
++    int k = 0; 
++    cout<<k;
++    return k;
++}
++
++// the string input could become truncated leading to information loss 
++// in order to fix this is to use string instead of char array 
+ 
+ void error3() {
+   char bufOne[12];
+@@ -41,6 +65,16 @@ void error3() {
+ 
+ }
+ 
++void error3ffix (){
++  string input;
++  string stringOne, stringTwo;
++  cin >> stringOne >> stringTwo;
++  cout<<stringOne;
++  cout<<stringTwo;
++}
++
++//do not use float as loop counter -- we do not know if the loop will iterate 9 or 10 times
++
+ 
+ int error4 (){
+ float g;
+-- 
+2.33.0.windows.2
+
